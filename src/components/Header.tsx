@@ -9,6 +9,7 @@ import { ShoppingBag, Heart, Search, Menu, X, ArrowRight, Trash2, ArrowUpRight }
 import { motion, AnimatePresence } from "motion/react";
 
 export default function Header() {
+  const logoImg = new URL("../assets/images/cv_luxury_logo_1780383867040.png", import.meta.url).href;
   const {
     page,
     setPage,
@@ -60,9 +61,15 @@ export default function Header() {
           {/* Brand Logo */}
           <button 
             onClick={() => setPage("home")}
-            className="flex items-center gap-1.5 text-left focus:outline-none group"
+            className="flex items-center gap-3 text-left focus:outline-none group"
             id="brand-logo-btn"
           >
+            <img 
+              src={logoImg} 
+              alt="CV Collection Logo" 
+              className="h-9 w-9 rounded-full object-cover border border-[#D4AF37]/40 shadow-sm transition-transform duration-350 group-hover:scale-105" 
+              referrerPolicy="no-referrer"
+            />
             <span className="font-serif text-2xl font-bold tracking-[2px] uppercase text-neutral-900 transition-colors group-hover:text-amber-500">
               CV Collection
             </span>

@@ -177,8 +177,8 @@ export default function Footer() {
               <Mail size={14} className="text-[#D4AF37] mt-0.5" />
               <div className="space-y-1">
                 <p className="text-[10px] text-neutral-500 uppercase tracking-widest">Enquiries Email</p>
-                <a href="mailto:contact@cvcollection.com" className="hover:text-white transition-colors block text-white font-mono">
-                  concierge@cvcollection.com
+                <a href="mailto:chintan4044@gmail.com" className="hover:text-white transition-colors block text-white font-mono">
+                  chintan4044@gmail.com
                 </a>
               </div>
             </li>
