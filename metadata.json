@@ -1,0 +1,8 @@
+{
+  "name": "CV Collection",
+  "description": "Elegant, luxury women's fashion eCommerce featuring premium ladies purses and elegant jewelry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
