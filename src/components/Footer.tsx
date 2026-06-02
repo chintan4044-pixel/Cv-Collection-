@@ -149,10 +149,10 @@ export default function Footer() {
             </li>
             <li>
               <button
-                onClick={() => setPage("admin")}
-                className="hover:text-white hover:underline transition-all text-[#c5a059] font-medium"
+                onClick={() => setPage("about")}
+                className="hover:text-white hover:underline transition-all"
               >
-                Catalog Studio (Admin Panel)
+                Our Heritage & Mission
               </button>
             </li>
           </ul>
@@ -199,6 +199,13 @@ export default function Footer() {
       <div className="bg-neutral-950 py-6 border-t border-neutral-900 text-center text-[10px] text-neutral-600 font-sans tracking-widest uppercase">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p>© {new Date().getFullYear()} CV Collection All Rights Reserved.</p>
+          <button
+            onClick={() => setPage("admin")}
+            className="text-[9px] text-neutral-800 hover:text-[#D4AF37] hover:underline transition-all cursor-pointer inline-flex items-center gap-1 font-mono tracking-widest uppercase"
+            id="owner-portal-trigger"
+          >
+            🔒 Owner Portal
+          </button>
           <p className="font-light text-neutral-700">Artistry Handcrafted for Luxury Lifestyles.</p>
         </div>
       </div>

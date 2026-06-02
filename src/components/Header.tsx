@@ -44,7 +44,6 @@ export default function Header() {
     { label: "Shop", target: "shop" as const },
     { label: "Our Story", target: "about" as const },
     { label: "Contact Us", target: "contact" as const },
-    { label: "Catalog Studio", target: "admin" as const },
   ];
 
   return (

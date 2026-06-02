@@ -34,6 +34,34 @@ const PRESET_IMAGES = {
 export default function Admin() {
   const { products, addProduct, updateProduct, deleteProduct, resetCatalog, setPage, viewProduct } = useShop();
 
+  // Secure admin authorization mechanism
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem("cv_admin_is_authenticated") === "true";
+  });
+  const [adminEmail, setAdminEmail] = useState("chintan70221@gmail.com");
+  const [adminPin, setAdminPin] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  const logoImg = new URL("../assets/images/cv_luxury_logo_1780383867040.png", import.meta.url).href;
+
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Authorized: chintan70221@gmail.com with PIN '7022'
+    if (adminEmail.trim().toLowerCase() === "chintan70221@gmail.com" && adminPin === "7022") {
+      setIsAuthenticated(true);
+      localStorage.setItem("cv_admin_is_authenticated", "true");
+      setLoginError("");
+    } else {
+      setLoginError("Aapka enter kiya hua email ya passcode galat hai. Kripya sahi passcode enter karein.");
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("cv_admin_is_authenticated");
+    setPage("home");
+  };
+
   // Form states
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
@@ -212,54 +240,147 @@ export default function Admin() {
   };
 
   return (
-    <div className="bg-white min-h-screen text-neutral-900 pb-20" id="admin-view-viewport">
-      
-      {/* 1. Header/Navigation Bar */}
-      <section className="bg-[#fdf2f2]/40 border-b border-neutral-150 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <Settings size={16} className="text-[#c5a059]" />
-                <span className="text-[10px] text-[#c5a059] uppercase tracking-[0.25em] font-bold">Aesthetic Management</span>
+    <>
+      {!isAuthenticated ? (
+        <div className="bg-neutral-950 min-h-screen flex items-center justify-center px-4 py-20 font-sans text-white relative overflow-hidden" id="admin-login-screen">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-950/20 via-neutral-950 to-neutral-950 opacity-80" />
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-md w-full bg-neutral-950 border border-neutral-850 p-8 shadow-2xl relative z-10 space-y-8"
+          >
+            <div className="text-center space-y-3">
+              <img 
+                src={logoImg} 
+                alt="CV Collection Logo" 
+                className="h-16 w-16 mx-auto rounded-full object-cover border border-[#D4AF37]/50 shadow-md"
+                referrerPolicy="no-referrer"
+              />
+              <div className="space-y-1">
+                <span className="text-[9px] text-[#D4AF37] uppercase tracking-[0.3em] font-semibold">OWNER PANEL SECURITY</span>
+                <h1 className="font-serif text-2xl text-white font-light tracking-wide">CV Collection Admin Portal</h1>
+                <p className="text-xs text-neutral-400 font-light max-w-xs mx-auto leading-relaxed">
+                  Kripya aapna authorized owner email aur passcode enter karein store items manage karne ke liye.
+                </p>
               </div>
-              <h1 className="font-serif text-3xl sm:text-4xl text-neutral-950 font-light tracking-tight">
-                CV Collection <span className="italic font-bold">Catalog Studio</span>
-              </h1>
-              <p className="text-xs text-neutral-500 font-light max-w-xl">
-                Add, edit, or reset premium leather purses and high-luxury jewelry instantly. Changes are synchronized live and stored in your persistence panel.
-              </p>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => setPage("shop")}
-                className="inline-flex items-center gap-2 border border-neutral-200 bg-white hover:border-neutral-900 px-5 py-3 text-[11px] font-medium tracking-widest uppercase transition-all rounded-none shadow-sm"
-                id="admin-to-shop-btn"
-              >
-                <ArrowLeft size={13} /> Return to Shop
-              </button>
-              <button
-                onClick={handleResetCatalog}
-                className="inline-flex items-center gap-2 border border-dashed border-red-200 hover:border-red-500 bg-red-50/20 text-red-700 hover:bg-red-50 px-5 py-3 text-[11px] font-medium tracking-widest uppercase transition-all rounded-none"
-                id="admin-reset-catalog-btn"
-                title="Reset live changes back to the design standard catalog"
-              >
-                <RotateCcw size={13} /> Reset Catalog Defaults
-              </button>
-              <button
-                onClick={handleOpenAdd}
-                className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white hover:bg-[#c5a059] px-6 py-3 text-[11px] font-medium tracking-widest uppercase transition-all shadow-md rounded-none"
-                id="admin-add-product-btn"
-              >
-                <Plus size={14} /> Add Luxury Product
-              </button>
-            </div>
+            <form onSubmit={handleLoginSubmit} className="space-y-5">
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37]/80">Owner Email</label>
+                <input
+                  type="email"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  placeholder="chintan70221@gmail.com"
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-none py-3 px-4 text-xs font-sans text-neutral-300 focus:outline-none focus:border-[#D4AF37] transition-all cursor-not-allowed"
+                  required
+                  disabled
+                />
+                <p className="text-[10px] text-neutral-500 italic">This panel is locked to your owner account email.</p>
+              </div>
 
-          </div>
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase font-bold tracking-widest text-[#D4AF37]/80">Secret Passcode</label>
+                <input
+                  type="password"
+                  value={adminPin}
+                  onChange={(e) => setAdminPin(e.target.value)}
+                  placeholder="Passcode enter karein..."
+                  className="w-full bg-neutral-900 border border-neutral-800 rounded-none py-3 px-4 text-xs font-sans text-neutral-300 focus:outline-none focus:border-[#D4AF37] transition-all text-center tracking-widest font-bold"
+                  required
+                  autoFocus
+                />
+              </div>
+
+              {loginError && (
+                <motion.p 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  className="text-xs text-red-400 text-center font-medium"
+                >
+                  {loginError}
+                </motion.p>
+              )}
+
+              <button
+                type="submit"
+                className="w-full bg-[#D4AF37] hover:bg-amber-600 text-neutral-950 py-3 text-[11px] font-bold tracking-widest uppercase transition-all shadow-md rounded-none"
+              >
+                Verify & Unlock Panel
+              </button>
+            </form>
+
+            <div className="border-t border-neutral-850 pt-5 text-center flex flex-col items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setPage("home")}
+                className="text-[10px] text-neutral-500 hover:text-white uppercase tracking-widest font-medium transition-colors cursor-pointer"
+              >
+                ← Cancel & Back to Website
+              </button>
+              <p className="text-[9px] text-neutral-600 font-mono">AUTHORIZED PERSONNEL ONLY • SECURITY LEVEL 4</p>
+            </div>
+          </motion.div>
         </div>
-      </section>
+      ) : (
+        <div className="bg-white min-h-screen text-neutral-900 pb-20" id="admin-view-viewport">
+          
+          {/* 1. Header/Navigation Bar */}
+          <section className="bg-[#fdf2f2]/40 border-b border-neutral-150 py-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Settings size={16} className="text-[#c5a059]" />
+                    <span className="text-[10px] text-[#c5a059] uppercase tracking-[0.25em] font-bold">Aesthetic Management</span>
+                  </div>
+                  <h1 className="font-serif text-3xl sm:text-4xl text-neutral-950 font-light tracking-tight">
+                    CV Collection <span className="italic font-bold">Catalog Studio</span>
+                  </h1>
+                  <p className="text-xs text-neutral-500 font-light max-w-xl">
+                    Add, edit, or reset premium leather purses and high-luxury jewelry instantly. Changes are synchronized live and stored in your persistence panel.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => setPage("shop")}
+                    className="inline-flex items-center gap-2 border border-neutral-200 bg-white hover:border-neutral-900 px-5 py-3 text-[11px] font-medium tracking-widest uppercase transition-all rounded-none shadow-sm"
+                    id="admin-to-shop-btn"
+                  >
+                    <ArrowLeft size={13} /> Return to Shop
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="inline-flex items-center gap-2 bg-neutral-950 text-white hover:bg-neutral-800 px-5 py-3 text-[11px] font-medium tracking-widest uppercase transition-all rounded-none shadow-sm"
+                    id="admin-logout-btn"
+                    title="Lock administration panel session immediately"
+                  >
+                    Lock Panel (Logout)
+                  </button>
+                  <button
+                    onClick={handleResetCatalog}
+                    className="inline-flex items-center gap-2 border border-dashed border-red-200 hover:border-red-500 bg-red-50/20 text-red-700 hover:bg-red-50 px-5 py-3 text-[11px] font-medium tracking-widest uppercase transition-all rounded-none"
+                    id="admin-reset-catalog-btn"
+                    title="Reset live changes back to the design standard catalog"
+                  >
+                    <RotateCcw size={13} /> Reset Catalog Defaults
+                  </button>
+                  <button
+                    onClick={handleOpenAdd}
+                    className="inline-flex items-center gap-2 bg-[#1a1a1a] text-white hover:bg-[#c5a059] px-6 py-3 text-[11px] font-medium tracking-widest uppercase transition-all shadow-md rounded-none"
+                    id="admin-add-product-btn"
+                  >
+                    <Plus size={14} /> Add Luxury Product
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
         
@@ -711,6 +832,8 @@ export default function Admin() {
         )}
       </AnimatePresence>
 
-    </div>
+        </div>
+      )}
+    </>
   );
 }
